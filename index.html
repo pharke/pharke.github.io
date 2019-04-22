@@ -62,6 +62,965 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-makerctf-temp-wp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/makerctf-temp-wp/" class="article-date">
+  <time datetime="2019-04-22T05:29:10.556Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿—<br>title: makerctf_temp_wp<br>date: 2019-04-11 13:29:10</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="makerctf-wp"><a href="#makerctf-wp" class="headerlink" title="makerctf wp"></a>makerctf wp</h1><p>####crypto </p>
+<p>#####easyrsa   by pharke_<br>虚拟机里解析下pem<br>get E N<br><img src="https://i.loli.net/2019/04/22/5cbd8f0c2e0b9.png" alt="Alt text"><br>用py转成10进制，不长<br><img src="https://i.loli.net/2019/04/22/5cbd8f59b4965.png" alt="Alt text"></p>
+<p>上网站分解N<br><img src="https://i.loli.net/2019/04/22/5cbd8f7f949f5.png" alt="Alt text"></p>
+<p>flag.enc 用个winhex解码<br><img src="https://i.loli.net/2019/04/22/5cbd8f9abe713.png" alt="Alt text"></p>
+<p>拿以前写的脚本求d，和解码<br> <img src="https://i.loli.net/2019/04/22/5cbd8fc5a39d6.png" alt="Alt text"><br><img src="https://i.loli.net/2019/04/22/5cbd8fdd680db.png" alt="Alt text"><br><img src="https://i.loli.net/2019/04/22/5cbd8fee7693d.png" alt="Alt text"></p>
+<p>#####B&amp;C   by  pharke_<br>先base32再base64<br><img src="https://i.loli.net/2019/04/22/5cbd901a77223.png" alt="Alt text"><br><img src="https://i.loli.net/2019/04/22/5cbd903489da1.png" alt="Alt text"><br>再变异凯撒（我敲代码慢所以是手算的）<br>猜测前面与凯撒（caesar）有关 还真猜中了<br><img src="https://i.loli.net/2019/04/22/5cbd9061882cb.png" alt="Alt text"><br><img src="https://i.loli.net/2019/04/22/5cbd9087c5e53.png" alt="Alt text"></p>
+<p>#####Affine_code  by pharke_</p>
+<p>codebook末尾有=，base一下<br>发现没有重复字符还有大括号，那就没跑了<br><img src="https://i.loli.net/2019/04/22/5cbd90b5dfcb2.png" alt="Alt text"></p>
+<p>看代码，总结下就是在codebook找与flag相同的字符的位置做a*x+b变换后所在位置的字符<br>爆破ab值</p>
+<pre><code>import re
+=&quot;l8P065muZL4AynwXI2phiRJk7DM3B}Fx{TVvNYGQjdfqo1SWKH9_UaeOsrtEcbgCz&quot;
+T=&quot;HmRyFKN548xMcFZNOkmN02M7ExMEw55kMyr&quot;
+
+tt = []
+len1=len(cb)
+for i in T:
+tt.append(cb.find(i))
+
+for a in range(len1):
+for b in range(len1):
+    res=&quot;&quot;
+    z= 0
+    for k in tt:
+        for i in range(len1):
+            if (a*i+b)%len1 == k:
+                res=res+cb[i]
+                z+=1
+    #print(res)
+    if len(re.findall(&quot;\{[^}]+\}&quot;,res)):
+        print(res+&apos;\n&apos;)
+        print(a,b)
+</code></pre><p> 眼尖找到了<br><img src="https://i.loli.net/2019/04/22/5cbd90cd614df.png" alt="Alt text"></p>
+<p>#####Base&amp;Fez   by pharke_</p>
+<p>直接上带码</p>
+<pre><code>import os
+import base64
+def xor(a,b):
+    assert len(a)==len(b)
+    c=&quot;&quot;
+    for i in range(len(a)):
+        c+=chr(ord(a[i])^ord(b[i]))
+    return c
+
+def f(x,k): #x^k^7
+    return xor(xor(x,k),7)
+
+def round(M,K):
+    L=M[0:27]
+    R=M[27:54]
+    new_l=R
+    new_r=xor(xor(R,L),K)
+    return new_l+new_r
+
+def festal(m,K):
+    for i in K:
+        m=round(m,i) 
+    return m
+
+def num(m):
+    c=ord(m)
+    #print(c)
+    if ord(&apos;0&apos;)&lt;=c and c&lt;=ord(&apos;9&apos;):
+        return c-ord(&apos;0&apos;)
+    else:
+        return c-ord(&apos;a&apos;)+10
+
+
+def bts(m):
+    res=&quot;&quot;
+    for i in range(54):
+        #print(i,num(m[2*i])*16+num(m[2*i+1]))
+        res+=chr(num(m[2*i])*16+num(m[2*i+1]))
+    return res
+
+testh=&quot;30928787e2784f51442a4909ee345b324d4e8f188b861a2befebced8c7a115e2b553c286108388c2f1877a62ffc605cf    01760e27d61a&quot;
+res2     =&quot;375561c56ad5f4b13a7a3c6b2804c4b81ddc1e8f991fdfbb05fd0bfda698f99794e933eb076772a2590b190ea3a972a    0592c783f0fca&quot;
+res3     =&quot;22838393d556e5ad25b881869d2641f08d8acebc0aa8dc505f8b06a8839344ab16d6104aadb62b451af9ec1b3119b10    add88d87c3688&quot;
+#testh=testh.decode(&apos;hex&apos;)
+res2=bts(res2)
+res3=bts(res3)
+t1=xor(res2,res3)
+t2=bts(testh)
+tr=t2[27:]
+tl=t2[:27]
+k2=xor(tr,res2[:27])
+k1=xor(xor(res2[27:],tr),tl)
+#print(t2)
+mr=xor(res3[:27],k2)
+ml=xor(xor(res3[27:],mr),k1)
+print(ml+mr)
+#res=ml+mr
+res=&quot;D..3kEas3&apos;HU;-tAN2PSE%uKV?Y3kj&lt;+Re#?SQV/2)&amp;BTBk(^]I/~&gt;&quot;
+</code></pre><p>最后有串字符，尝试各种base，最终base85得到flag<br><img src="https://i.loli.net/2019/04/22/5cbd90f4470c6.png" alt="Alt text"></p>
+<p>####re</p>
+<p>#####net  by  碎粒<br>看代码是des<br><img src="https://i.loli.net/2019/04/22/5cbd911732ce7.png" alt="Alt text"></p>
+<p>然后听话的按格式des<br><img src="https://i.loli.net/2019/04/22/5cbd912c871db.png" alt="Alt text"></p>
+<p>####misc</p>
+<p>#####real_sign_in by 长风</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd914573382.jpg" alt="Alt text"></p>
+<p>#####backwords  by 碎粒<br>十六进制打开，后半截是倒着写的一个png</p>
+<p>打开后<br><img src="https://i.loli.net/2019/04/22/5cbd91610c3b2.png" alt="Alt text"></p>
+<p>######toads小饼干那个  by 长风<br>流量分析，看到了网易云的一些相关流量，于是想到去网易云直接搜索makerctf结果发现了这个用户</p>
+<p>然后看到签名 “看我私信”</p>
+<p>想到cookie</p>
+<p>当时为了排除是哪个cookie决定登录的时候<br>先登录自己的账号<br>挨个删掉<br>刷新<br>看掉线没<br><img src="https://i.loli.net/2019/04/22/5cbd917c3ba6a.jpg" alt="Alt text"></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd9191793e2.jpg" alt="Alt text"></p>
+<p>#####究极脑洞  by pharke_<br>316f526f614766766855384d4b73396a3865316f716d41十六进制</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd91b2ba469.jpg" alt="Alt text"></p>
+<p>base64没结果，脑洞百度云pan.baidu.com/s/1oRoaGfvhU8MKs9j8e1oqmA</p>
+<p>提取码是w1ndbot的签名</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd91d06018b.png" alt="Alt text"></p>
+<p>加密的压缩文件</p>
+<p>文件名base64</p>
+<p>group leader</p>
+<p>群主qq</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd91e6685d0.jpg" alt="Alt text"></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd9209b6993.jpg" alt="Alt text"></p>
+<p>#####问卷 by 碎粒<br><img src="https://i.loli.net/2019/04/22/5cbd9237c6bd9.png" alt="Alt text"></p>
+<p>####web</p>
+<p>#####签到题 by 碎粒</p>
+<p>找入口<br>f12<br>看下响应<br>hint！！入口？！！</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd9256277bf.png" alt="Alt text"></p>
+<p>要密码。。<br><img src="https://i.loli.net/2019/04/22/5cbd926c51f60.png" alt="Alt text"></p>
+<p>首先是json_decode，说明我们需要传入json格式的一个字符串，post方式传值，变量名maker，打开hackbar，然后这个字符串要被解析成一个二维数组，第一层是user，第二层是password。看到if里面的判断条件，前半段，当数字和字符串比较的时候，<br><img src="https://i.loli.net/2019/04/22/5cbd92817a770.jpg" alt="Alt text"></p>
+<p>是这个样子，所以传一个数字进去即可，然后后半段，查资料了解到strcmp这个函数比较字符串和数组的时候直接return0判断相等了。所以传入一个数组password</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/makerctf-temp-wp/" data-id="cjus78zpn0006gcuznhpmgu35" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RSA例题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA例题/" class="article-date">
+  <time datetime="2019-04-22T05:28:40.584Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿﻿—<br>title: RSA例题<br>date: 2019-03-10 13:28:40</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="瞎找的题1-rsarsa"><a href="#瞎找的题1-rsarsa" class="headerlink" title="瞎找的题1.rsarsa"></a>瞎找的题1.rsarsa</h1><p>链接   <a href="http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt</a></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd54616b94e.png" alt="Alt text"></p>
+<p>p，q知道而且e很大，直接暴力</p>
+<p>先求</p>
+<p>##L        <img src="https://i.loli.net/2019/04/22/5cbd5461749d6.png" alt="Alt text"></p>
+<p>##n       <img src="https://i.loli.net/2019/04/22/5cbd54617dad9.png" alt="Alt text"></p>
+<p>##d      <img src="https://i.loli.net/2019/04/22/5cbd54617e0a9.png" alt="Alt text"></p>
+<p>解密<br><img src="https://i.loli.net/2019/04/22/5cbd546188ddc.png" alt="Alt text"></p>
+<p>over<br><img src="https://i.loli.net/2019/04/22/5cbd54618f9a4.png" alt="Alt text"><br>通过，没问题<br><img src="https://i.loli.net/2019/04/22/5cbd54618fecf.png" alt="Alt text"></p>
+<h1 id="瞎找的题2"><a href="#瞎找的题2" class="headerlink" title="瞎找的题2."></a>瞎找的题2.</h1><p>链接： <a href="http://ctf5.shiyanbar.com/crypto/RSAROLL.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/RSAROLL.txt</a></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd54619c2ac.png" alt="Alt text"></p>
+<p>已知n，e，c求m，而且ne都不大</p>
+<p>####暴力</p>
+<p>查p，q<br><img src="https://i.loli.net/2019/04/22/5cbd54619c33f.png" alt="Alt text"></p>
+<p>同上解密</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd5461ba75f.png" alt="Alt text"></p>
+<p>bingo</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd555e73d4c.png" alt="Alt text"></p>
+<h1 id="瞎找的题3"><a href="#瞎找的题3" class="headerlink" title="瞎找的题3."></a>瞎找的题3.</h1><p>链接：<a href="http://ctf5.shiyanbar.com/crypto/enc.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/enc.txt</a></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd555e9cc31.png" alt="Alt text"></p>
+<p>一看就是我做不出来的题，下周见</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA例题/" data-id="cjus78zp70000gcuzibjr0j3j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RSA共模攻击" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA共模攻击/" class="article-date">
+  <time datetime="2019-04-22T05:28:08.914Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: RSA共模攻击<br>date: 2019-02-08 17:28:08</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="rsa共模攻击"><a href="#rsa共模攻击" class="headerlink" title="rsa共模攻击"></a>rsa共模攻击</h1><p>假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论：</p>
+<p>c1 = pow(m, e1, N)<br>c2 = pow(m, e2, N)</p>
+<p>分别拿对应的私钥来加密，可以得到相同的明文m</p>
+<p>m = pow(c1, d1, N)<br>m = pow(c2, d2, N)</p>
+<p>首先假设，e1，e2互质</p>
+<p>即</p>
+<p>gcd(e1,e2)=1<br>此时则有</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>式中，s1、s2皆为整数，但是一正一负。</p>
+<p>通过扩展欧几里德算法，我们可以得到该式子的一组解（s1,s2），假设s1为正数,s2为负数.</p>
+<p>因为</p>
+<p>c1 = m^e1%n<br>c2 = m^e2%n<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1%n)^s1</em>(m^e2%n)^s2)%n<br>根据模运算性质，可以化简为</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1)^s1</em>(m^e2)^s2)%n<br>即</p>
+<p>(c1^s1*c2^s2)%n = (m^(e1^s1+e2^s2))%n<br>又前面提到</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = (m^(1))%n<br>(c1^s1</em>c2^s2)%n = m^%n<br>即</p>
+<p>c1^s1*c2^s2 = m<br>也就是证明了命题：当n不变的情况下，知道n,e1,e2,c1,c2 可以在不知道d1,d2情况下，解出m。</p>
+<h1 id="Pollard-rho整数分解"><a href="#Pollard-rho整数分解" class="headerlink" title="Pollard-rho整数分解"></a>Pollard-rho整数分解</h1><p>算法原理：生成两个整数a和b，计算p=gcd(a-b,n)，直到p不为1或者a,b出现循环为止，若p=n，则p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi-1 ^2+k，一般取k=1，若序列出现循环则退出。计算p=gcd(xi-1 - xi,n)，若p=1，返回上一步，直到p&gt;1为止。若p=n，则n为素数，否则p为n的一个约数并递归分解p和n/p.</p>
+<p>  实现代码如下：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;stdio.h&gt;
+
+const int Times = 10;
+const int N = 5500;
+
+using namespace std;
+typedef long long LL;
+
+LL ct, cnt;
+LL fac[N], num[N];
+
+LL gcd(LL a, LL b)
+{
+    return b? gcd(b, a % b) : a;
+}
+
+LL multi(LL a, LL b, LL m)
+{
+    LL ans = 0;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = (ans + a) % m;
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = (a + a) % m;
+    }
+    return ans;
+}
+
+LL quick_mod(LL a, LL b, LL m)
+{
+    LL ans = 1;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = multi(ans, a, m);
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = multi(a, a, m);
+    }
+    return ans;
+}
+
+bool Miller_Rabin(LL n)
+{
+    if(n == 2) return true;
+    if(n &lt; 2 || !(n &amp; 1)) return false;
+    LL m = n - 1;
+    int k = 0;
+    while((m &amp; 1) == 0)
+    {
+        k++;
+        m &gt;&gt;= 1;
+    }
+    for(int i=0; i&lt;Times; i++)
+    {
+        LL a = rand() % (n - 1) + 1;
+        LL x = quick_mod(a, m, n);
+        LL y = 0;
+        for(int j=0; j&lt;k; j++)
+        {
+            y = multi(x, x, n);
+            if(y == 1 &amp;&amp; x != 1 &amp;&amp; x != n - 1) return false;
+            x = y;
+        }
+        if(y != 1) return false;
+    }
+    return true;
+}
+
+LL pollard_rho(LL n, LL c)
+{
+    LL i = 1, k = 2;
+    LL x = rand() % (n - 1) + 1;
+    LL y = x;
+    while(true)
+    {
+        i++;
+        x = (multi(x, x, n) + c) % n;
+        LL d = gcd((y - x + n) % n, n);
+        if(1 &lt; d &amp;&amp; d &lt; n) return d;
+        if(y == x) return n;
+        if(i == k)
+        {
+            y = x;
+            k &lt;&lt;= 1;
+        }
+    }
+}
+
+void find(LL n, int c)
+{
+    if(n == 1) return;
+    if(Miller_Rabin(n))
+    {
+        fac[ct++] = n;
+        return ;
+    }
+    LL p = n;
+    LL k = c;
+    while(p &gt;= n) p = pollard_rho(p, c--);
+    find(p, k);
+    find(n / p, k);
+}
+
+int main()
+{
+    LL n;
+    while(cin&gt;&gt;n)
+    {
+        ct = 0;
+        find(n, 120);
+        sort(fac, fac + ct);
+        num[0] = 1;
+        int k = 1;
+        for(int i=1; i&lt;ct; i++)
+        {
+            if(fac[i] == fac[i-1])
+                ++num[k-1];
+            else
+            {
+                num[k] = 1;
+                fac[k++] = fac[i];
+            }
+        }
+        cnt = k;
+        for(int i=0; i&lt;cnt; i++)
+            cout&lt;&lt;fac[i]&lt;&lt;&quot;^&quot;&lt;&lt;num[i]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA共模攻击/" data-id="cjus78zpg0001gcuzuxiquxj7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RSA小指数攻击" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA小指数攻击/" class="article-date">
+  <time datetime="2019-04-22T05:27:58.560Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: RSA小指数攻击<br>date: 2019-02-16 20:27:58</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="RSA小指数e攻击"><a href="#RSA小指数e攻击" class="headerlink" title="RSA小指数e攻击"></a>RSA小指数e攻击</h1><p>如果RSA系统的公钥e选取较小的值，可以使得加密和验证签名的速度有所提高，但是如果e的选取太小，就容易受到攻击。</p>
+<p>有三个分别使用不同的模数n1,n2,n3，但是都选取e=3，加密同一个明文可以得到：</p>
+<p>c1 = pow(m,3,n1)<br>c2 = pow(m,3,n2)<br>c3 = pow(m,3,n3)</p>
+<p>一般情况下，n1,n2,n3互素，否则会比较容易求出公因子，从而安全性大幅度的减低。</p>
+<h1 id="RSA选择密文攻击"><a href="#RSA选择密文攻击" class="headerlink" title="RSA选择密文攻击"></a>RSA选择密文攻击</h1><p>在此种攻击模型中，攻击者需要掌握的内容包括：加密算法、截获的部分密文、自己选择的密文消息以及相应的被解密的明文。</p>
+<p>####利用公约数</p>
+<p>#####思路<br>如果两次加密的n1和n2具有相同的素因子，可以利用欧几里德算法直接分解n1和n2.<br>通过欧几里德算法计算出两个n的最大公约数p：</p>
+<pre><code>def gcd(a, b):
+if a &lt; b:
+    a, b = b, a
+while b != 0:
+    temp = a % b
+     a = b
+     b = temp
+def gcd_digui(a, b):
+    if b != 0:
+           return a
+    return gcd(b,a%b)
+
+p = gcd(n1,n2)
+</code></pre><p>识别此类题目，通常会发现题目给了若干个n，均不相同，并且都是2048bit，4096bit级别，无法正面硬杠，并且明文都没什么联系，e也一般取65537。<br>而欧几里得算法的时间复杂度为：O(log n)。这个时间复杂度即便是4096 bit也是秒破级别<br>根据欧几里德算法算出的p之后，再用n除以p即可求出q，由此可以得到的参数有p、q、n、e，再使用常规方法计算出d，即可破解密文。</p>
+<p>####低加密指数攻击<br>在RSA中的e被称为加密指数。由于e的选择只需要满足以下条件即可</p>
+<p>计算欧拉函数 φ = (p-1) * (q-1)，然后选择一个e(1&lt;e&lt;φ)，并且e和φ互质</p>
+<p>选择小的e可以缩短加密时间，但是选择的e不当，可能会造成严重的安全问题。<br>e=3的小明文攻击<br>当e=3，并且明文过小时，导致明文的三次方仍然小于n，通过直接对密文三次开方，即可得到明文。<br>原理如下</p>
+<p>对明文m进行加密：c = pow(m, 3, N),可以得到密文c。<br>因为n &gt; pow(m, 3)，所以c = pow(m, 3, N) = pow(m, 3)，故对密文三次开方，即可得到明文。</p>
+<p>有一种特殊的情况是：pow(m, 3) &gt; n，但是不是足够，假设存在这样的k，有下列的公式成立：</p>
+<p>c = pow(m, 3) + k * n</p>
+<p>爆破k，当且仅当c - (k <em> n)可以开三次方，c - (k </em> n)开三次方结果就是明文m。</p>
+<p>###欧拉函数<br>缩写ϕ，程序中一般用phi(n)来表示，求解出小于n且与n互质的正整数的个数<br>我们针对一个n，可以将它化为如下式子： </p>
+<p>n=p^q1⋅p^q2⋅p^q3⋅⋅⋅⋅p^qn</p>
+<p>从而可以得出如下公式： </p>
+<p>phi(n)=n⋅(1−1/p1)⋅(1−1/p2)⋅(1−1/p3)⋅⋅⋅⋅(1−1/pn)</p>
+<p>简化： </p>
+<p>phi(n)=n⋅((p1−1)/p1)⋅((p2−1)/p2)⋅((p3−1)/p3)⋅⋅⋅⋅((pn−1)/pn)</p>
+<p>通过下述公式我们可以写出如下代码：</p>
+<pre><code>/*
+ *函数名称：phi
+ *参数n：需要求解的欧拉函数值
+*/
+int phi(int n){
+    int res = n;//int -&gt; LL
+    for(int i = 2;i &lt;= sqrt(n);i ++){
+        if(n % i == 0){
+            res = res / i * (i - 1);
+            while(n % i == 0) n /= i;
+        }
+    }
+    if(n &gt; 1) res = res / n * (n - 1);
+    return res;
+}
+</code></pre><p>先进行除法是为了防止中间数据溢出</p>
+<p>欧拉函数求出的结果有以下几种性质：</p>
+<p>1.除了n=2外，phi(n)≡0(mod2即phi(n)求出的结果为偶数<br>2.phi(n)为积性函数，但不是完全积性函数，phi(n⋅m)=phi(n)⋅phi(m)当且仅当gcd(n,m)==1时成立</p>
+<p>3.一个数的所有质因子之和为：phi(n)⋅n/2.因为gcd(n,i)=1所以gcd(n,n−i)==1,如此f(n)=(a1+n−a1)+(a2+n−a2)+⋅⋅⋅+(an+n−an)由于an和n−an都是与n互质，所以最终的结果f(n)=phi(n)⋅n，由于算了两倍质数，所以最后要除以2，得出phi(n)⋅n/2.</p>
+<p>单单以第一份代码求解的话，求解一个数的欧拉函数值的复杂度为O(sqrt(n))，所以求解n范围内每一个数的欧拉函数值的复杂度为O(n⋅sqrt(n))，很明显，当数据大于105以上后明显是不够看的。我们可以根据求解大范围素数的方法求解欧拉函数值即筛选法求欧拉函数值.</p>
+<p>代码如下：</p>
+<pre><code>const int MAXN = 1e6 + 5;
+int phiArr[MAXN];
+
+void phi(void) {
+    phiArr[1] = 1;
+    for(int i = 2; i &lt; MAXN; i ++) {
+        phiArr[i] = i;
+    }
+    for(int i = 2; i &lt; MAXN; i ++) {
+        if(phiArr[i] == i) {
+            for(int j = i; j &lt; MAXN; j += i) {
+                phiArr[j] = phiArr[j] / i * (i - 1);
+           }
+        }
+    }
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA小指数攻击/" data-id="cjus78zph0002gcuz4356dvah" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RSA暴力破解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA暴力破解/" class="article-date">
+  <time datetime="2019-04-22T05:27:45.567Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿﻿—<br>title: RSA暴力破解<br>date: 2019-02-01 19:27:45</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="RSA的暴力破解"><a href="#RSA的暴力破解" class="headerlink" title="RSA的暴力破解"></a>RSA的暴力破解</h1><p>#####回顾RSA加密过程</p>
+<p>1.找到两个大素数<em>p</em>和<em>q</em>，计算出<em>n=p×q</em></p>
+<p>2.得到<em>φ=(p−1)×(q−1)</em>，然后选择一个<em>e(1&lt;e&lt;φ)</em>，且<em>gcd(φ,e)=1</em>，<em>gcd</em>为最大公约数，即<em>e</em>和<em>φ</em>互质</p>
+<p>3.计算出<em>d</em>，计算方法:<em>(e×d)%φ=1</em></p>
+<p>4.得到了公私钥对，其中<em>{e,n}</em>为公钥，<em>{d,n}</em>为私钥。</p>
+<p>5.针对明文<em>M</em>进行加密：<em>C=Me%n</em>，得到的<em>C</em>即为密文</p>
+<p>6.针对密文<em>C</em>，进行解密，<em>M=Cd%n</em>，得到的<em>M</em>即为明文</p>
+<p>#####RSA的公钥是公开的，即对于知道<em>{e,n}</em>的数据，如果<em>n</em>比较小的话我们是可以暴力出结果的，这就是所谓的数学暴力攻击</p>
+<p>攻击方法一般是：给定RSA的公钥<em>{e,n}</em>，根据RSA的定义，如果能够将<em>n</em>分解为两个素数的乘积，即<em>n=p×q</em>，那么就可以计算出<em>d</em>了，也就是得到私钥<em>{d,n}</em><br>所以这种方法只能针对<em>n</em>的值非常小的情况下，基本最大就是<em>108</em>大小的，这应该就是<em>n</em>可以暴力的极限了，二进制位数为<em>32</em>位。</p>
+<p>#####已知n,e，我们可以暴力查找质数<em>p , q</em></p>
+<pre><code>for(int i = 1;i &lt; len;i ++){
+if(n % prime[i] == 0 &amp;&amp; isprime[n/prime[i]]){
+    //输出prime[i]和n/prime[i]
+    break;
+  }
+}
+</code></pre><p>#####c++代码算出d的值</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
+    if(b == 0) {
+    x = 1; y = 0;
+    return a;
+}
+    LL r = exgcd(b, a % b, x, y);
+    LL t = y;
+    y = x - a / b * y;
+    x = t;
+    return r;
+}
+
+/*可以得到x&gt;=bound时的x和y，返回true表示有解*/
+bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+    xx = xx * c / d; yy = yy * c / d;
+    LL t = (bound - xx) * d / b;
+
+    x = xx + b / d * t;
+    if(x &lt; bound) {
+        t++;
+        x = xx + b / d * t;
+        }
+        y = yy - a / d * t;
+        return true;
+    }
+
+int main(){
+    LL k = 792, e = 49;
+    LL x, y;
+    solve(e, k, 1, 0, x, y);
+    printf(&quot;%lld\n&quot;, x);
+    return 0;
+}
+</code></pre><p>#####c++破解代码</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL pow_LL(LL x, LL n, LL mod){
+   LL ret = 1;
+   while(n &gt; 0){
+    if(n &amp; 1) ret = ret * x % mod;
+    x = x * x % mod;
+    n &gt;&gt;= 1;
+   }
+    return ret;
+}
+
+int main(){
+    LL d = 97, n = 851;
+    LL arr[] = {617,673,319,695,16,252,299,319,657,346,767,299,346,88};
+    for(int i = 0;i &lt; 14;i ++){
+        printf(&quot;%c&quot;, pow_LL(arr[i], d, n));
+    }
+    return 0;
+}
+</code></pre><p>#####快速幂与快速幂取模</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd5615ad411.png" alt="Alt text"></p>
+<p>######快速幂代码<br>    int qsm(int a,int b)<br>    {<br>        int ans = 1,base = a;<br>        while(b != 0){<br>            if(b &amp; 1 != 0){   //用&amp;1来判断最后一位是0还是1，是1就乘当前权值<br>                ans <em>= base;<br>            }<br>            base </em>= base;    //更新权值<br>            b &gt;&gt;= 1;         //指数缩进<br>        }<br>        return ans;<br>    }</p>
+<p>######快速幂取模</p>
+<p>这个算法需要了解一下数论的一个定理：</p>
+<p>   <em>(a</em>b) mod c = ((a mod c)*<em>(</em>b mod c)) mod c*</p>
+<p>导出： <em>(a^b) mod c = (a mod c)^b mod c</em></p>
+<p>所以快速幂取模：</p>
+<pre><code>int pow_mod(int a,int b,int c){
+int ans = 1;
+int base = a%c;
+while(b){
+    if(b &amp; 1) ans = (ans*base)%c;
+    base = (base*base)%c;
+    b &gt;&gt;= 1;
+}
+return ans;
+}
+</code></pre><p>#####扩展欧几里得算法</p>
+<p>扩展欧几里得可以求解出<em>a⋅x+b⋅y=gcd(a,b)</em>中一个满足方程式的整数特解 </p>
+<p><em>g=gcd(a,b)      (1)</em></p>
+<p><em>a⋅x+b⋅y=g           (2)</em></p>
+<p><em>b⋅x1+(a mod b)⋅y1=g        (3)</em></p>
+<p>我们需要针对<em>(2)</em>和<em>(3)</em>找出他们之间的规律<br>很明显 </p>
+<p><em>amodb=a−</em>⌊<em>a/b</em>⌋<em>⋅b   (4)</em></p>
+<p>所以由<em>(3)</em>和<em>(4)</em>可得<em>(5)</em> </p>
+<p><em>b⋅x1+(a−</em>⌊<em>a/b</em>⌋<em>⋅b)⋅y1=g(5)</em></p>
+<p>化简<em>(5)</em>为<em>(6)</em> </p>
+<p><em>a⋅y1+b⋅(x1−</em>⌊<em>a/b</em>⌋<em>⋅y1)=g(6)</em></p>
+<p>我们联合<em>(2)</em>和<em>(6)</em>,可以得出下述公式： </p>
+<p><em>x=y1</em></p>
+<p><em>y=x1−</em>⌊<em>a/b</em>⌋<em>⋅y1</em></p>
+<p>其中我们书写代码的终止条件：<br><em>gcd(a,0)=a</em>为其终止点<br><em>a⋅1+0⋅0=a </em><br>所以当<em>b=0</em>时，<em>x=1，y=0</em><br>所以代码：</p>
+<pre><code>void ex_gcd(int a,int b, int &amp;d, int &amp;x, int &amp;y){
+if(!b){
+    x = 1
+    y = 0;
+    d = a;
+    return;
+}
+ex_gcd(b, a % b, d, y, x);
+y -= x * (a / b);
+}
+</code></pre><p>最终求出的<em>x</em>，<em>y</em>为<em>a⋅x+b⋅y=gcd(a,b)</em>的一个特解<br>然而解是可能有多个，因为<em>a⋅x+b⋅y=gcd(a,b)</em>可能是条直线<br>所以如何得知其它解呢<br>我们假设如果存在另外一个解<em>x2</em>，<em>y2</em>，那么可以列出下列方程： </p>
+<p><em>a⋅(x1−x2)=b⋅(y2−y1)</em></p>
+<p>两边同时除以g </p>
+<p><em>a′⋅(x1−x2)=b′⋅(y2−y1)</em></p>
+<p>其中<em>a′=a/g</em>，<em>b′=b/g</em>，且<em>a′</em>和<em>b′</em>一定互素，那么<em>(x1−x2)</em>一定为<em>b′</em>的倍数，即<em>(x1−x2)=k⋅a′</em>,代入公式得</p>
+<p><em>(y2−y1)=k⋅a′</em></p>
+<p>所以<em>a⋅x+b⋅y=gcd(a,b)</em>的一个特解为<em>(x0，y0)</em>的话，那么其任意整数解都可以写成<em>(x0+k⋅b′，y0−k⋅a′) </em></p>
+<p>#####扩展欧几里得算法的个模板</p>
+<pre><code>LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
+if(b == 0) {
+    x = 1; y = 0;
+    return a;
+}
+LL r = exgcd(b, a % b, x, y);
+LL t = y;
+y = x - a / b * y;
+x = t;
+return r;
+}
+
+/*可以得到x&gt;=bound时的x和y，返回true表示有解
+否则无解，我只想问这个模板无脑调用有木有~
+但是不同的题目特判不同，有的地方记得还是特判，比如a和b的正负和是否为0~*/
+bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+xx = xx * c / d; yy = yy * c / d;
+LL t = (bound - xx) * d / b;
+
+x = xx + b / d * t;
+if(x &lt; bound) {
+    t++;
+    x = xx + b / d * t;
+}
+y = yy - a / d * t;
+return true;
+ }
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA暴力破解/" data-id="cjus78zpj0003gcuzhzw8gb9l" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RSA总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA总结/" class="article-date">
+  <time datetime="2019-04-22T05:25:33.880Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: RSA总结<br>date: 2019-02-24 22:38:33</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p>###RSA总结</p>
+<p>####核心函数</p>
+<p>1.分解n，</p>
+<p>Pollard­rho整数分解，原理：生成两个整数a和b，计算p=gcd(a­b,n)，直到p不为1或者a,b出现循环为止，若p=n，则 p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi­1 ^2+k，一般取k=1，若 序列出现循环则退出。计算p=gcd(xi­1 ­ xi,n)，若p=1，返回上一步，直到p&gt;1为止。若p=n，则n为 素数，否则p为n的一个约数并递归分解p和n/p</p>
+<p>c++代码</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;stdio.h&gt;
+
+const int Times = 10;
+const int N = 5500;
+
+using namespace std;
+typedef long long LL;
+
+LL ct, cnt;
+LL fac[N], num[N];
+
+LL gcd(LL a, LL b)
+{
+    return b? gcd(b, a % b) : a;
+}
+
+LL multi(LL a, LL b, LL m)
+{
+    LL ans = 0;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = (ans + a) % m;
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = (a + a) % m;
+    }
+    return ans;
+}
+
+LL quick_mod(LL a, LL b, LL m)
+{
+    LL ans = 1;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = multi(ans, a, m);
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = multi(a, a, m);
+    }
+    return ans;
+}
+
+bool Miller_Rabin(LL n)
+{
+    if(n == 2) return true;
+    if(n &lt; 2 || !(n &amp; 1)) return false;
+    LL m = n - 1;
+    int k = 0;
+    while((m &amp; 1) == 0)
+    {
+        k++;
+        m &gt;&gt;= 1;
+    }
+    for(int i=0; i&lt;Times; i++)
+    {
+        LL a = rand() % (n - 1) + 1;
+        LL x = quick_mod(a, m, n);
+        LL y = 0;
+        for(int j=0; j&lt;k; j++)
+        {
+            y = multi(x, x, n);
+            if(y == 1 &amp;&amp; x != 1 &amp;&amp; x != n - 1) return false;
+            x = y;
+        }
+        if(y != 1) return false;
+    }
+    return true;
+}
+
+LL pollard_rho(LL n, LL c)
+{
+    LL i = 1, k = 2;
+    LL x = rand() % (n - 1) + 1;
+    LL y = x;
+    while(true)
+    {
+        i++;
+        x = (multi(x, x, n) + c) % n;
+        LL d = gcd((y - x + n) % n, n);
+        if(1 &lt; d &amp;&amp; d &lt; n) return d;
+        if(y == x) return n;
+        if(i == k)
+        {
+            y = x;
+            k &lt;&lt;= 1;
+        }
+    }
+}
+
+void find(LL n, int c)
+{
+    if(n == 1) return;
+    if(Miller_Rabin(n))
+    {
+        fac[ct++] = n;
+        return ;
+    }
+    LL p = n;
+    LL k = c;
+    while(p &gt;= n) p = pollard_rho(p, c--);
+    find(p, k);
+    find(n / p, k);
+}
+
+int main()
+{
+    LL n;
+    while(cin&gt;&gt;n)
+    {
+        ct = 0;
+        find(n, 120);
+        sort(fac, fac + ct);
+        num[0] = 1;
+        int k = 1;
+        for(int i=1; i&lt;ct; i++)
+        {
+            if(fac[i] == fac[i-1])
+                ++num[k-1];
+            else
+            {
+                num[k] = 1;
+                fac[k++] = fac[i];
+            }
+        }
+        cnt = k;
+        for(int i=0; i&lt;cnt; i++)
+            cout&lt;&lt;fac[i]&lt;&lt;&quot;^&quot;&lt;&lt;num[i]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre><p>2.求n1、n2公约数</p>
+<p>欧几里得算法（辗转相除法）<br>py代码</p>
+<pre><code>def gcd(a, b):
+if a &lt; b:
+    a, b = b, a
+while b != 0:
+    temp = a % b
+     a = b
+     b = temp
+def gcd_digui(a, b):
+    if b != 0:
+           return a
+    return gcd(b,a%b)
+
+p = gcd(n1,n2)
+</code></pre><p>3.求d：</p>
+<p>c++代码：</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
+    if(b == 0) {
+    x = 1; y = 0;
+    return a;
+}
+    LL r = exgcd(b, a % b, x, y);
+    LL t = y;
+    y = x - a / b * y;
+    x = t;
+    return r;
+}
+
+/*可以得到x&gt;=bound时的x和y，返回true表示有解*/
+bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+    xx = xx * c / d; yy = yy * c / d;
+    LL t = (bound - xx) * d / b;
+
+    x = xx + b / d * t;
+    if(x &lt; bound) {
+        t++;
+        x = xx + b / d * t;
+        }
+        y = yy - a / d * t;
+        return true;
+    }
+
+int main(){
+    LL k , e ;
+    LL x, y;
+    cin&gt;&gt;e&gt;&gt;k;
+    solve(e, k, 1, 0, x, y);
+    printf(&quot;%lld\n&quot;, x);
+    return 0;
+}
+</code></pre><p>5.加解密</p>
+<p>c++代码：</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL pow_LL(LL x, LL n, LL mod){
+   LL ret = 1;
+   while(n &gt; 0){
+    if(n &amp; 1) ret = ret * x % mod;
+    x = x * x % mod;
+    n &gt;&gt;= 1;
+   }
+    return ret;
+}
+
+int main(){
+    LL de , n ,i = 0;
+    LL arr[100]={0};
+    cin&gt;&gt;de&gt;&gt;n;
+    for(while(scanf(&quot;%LL&quot;, &amp;arr[i]))) i++;
+    for(int i = 0;arr[i];i ++){
+        printf(&quot;%c&quot;, pow_LL(arr[i], d, n));
+    }
+    return 0;
+}
+</code></pre><p>###常用方法：</p>
+<p>1.暴力计算<br> 对于LL内的n，暴力计算，p和q存在相差过大或者过近时用yafu</p>
+<p>2.利用公约数<br>有多个极大的n，考虑求gcd</p>
+<p>3.小指数攻击<br>e较小时，可能有n &gt; pow(m, e)，所以c = pow(m,e, N) = pow(m, e)，故对密文三次开方，即可得到明文。<br>或者pow(m, e) &gt; n，但是不是足够，假设存在这样的k，有下列的公式成立：<br>c = pow(m, e) + k <em> n<br>爆破k，当且仅当c ­ (k </em> n)可以开三次方，c ­ (k * n)开三次方结果就是明文m。</p>
+<p>4.共模攻击<br>假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，求e1<em>s1+e2</em>s2 = 1 ，可以用c1^s1*c2^s2 = m来求名文  </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA总结/" data-id="cjus78zpk0004gcuzcd8yg0iq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/22/hello-world/" class="article-date">
@@ -97,7 +1056,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/22/hello-world/" data-id="cjurwtlqa000034uz0g9h2v5z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/22/hello-world/" data-id="cjus78zpm0005gcuzqwldo52m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -138,7 +1097,23 @@
       <ul>
         
           <li>
-            <a href="/2019/04/22/hello-world/">Hello World</a>
+            <a href="/2019/04/22/makerctf-temp-wp/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA例题/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA共模攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA小指数攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA暴力破解/">(no title)</a>
           </li>
         
       </ul>

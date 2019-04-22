@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="title: RSA共模攻击date: 2019-02-08 17:28:08 tags:rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/RSA共模攻击/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="title: RSA共模攻击date: 2019-02-08 17:28:08 tags:rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-22T05:32:54.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="title: RSA共模攻击date: 2019-02-08 17:28:08 tags:rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-RSA共模攻击" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA共模攻击/" class="article-date">
+  <time datetime="2019-04-22T05:28:08.914Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: RSA共模攻击<br>date: 2019-02-08 17:28:08</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="rsa共模攻击"><a href="#rsa共模攻击" class="headerlink" title="rsa共模攻击"></a>rsa共模攻击</h1><p>假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论：</p>
+<p>c1 = pow(m, e1, N)<br>c2 = pow(m, e2, N)</p>
+<p>分别拿对应的私钥来加密，可以得到相同的明文m</p>
+<p>m = pow(c1, d1, N)<br>m = pow(c2, d2, N)</p>
+<p>首先假设，e1，e2互质</p>
+<p>即</p>
+<p>gcd(e1,e2)=1<br>此时则有</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>式中，s1、s2皆为整数，但是一正一负。</p>
+<p>通过扩展欧几里德算法，我们可以得到该式子的一组解（s1,s2），假设s1为正数,s2为负数.</p>
+<p>因为</p>
+<p>c1 = m^e1%n<br>c2 = m^e2%n<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1%n)^s1</em>(m^e2%n)^s2)%n<br>根据模运算性质，可以化简为</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1)^s1</em>(m^e2)^s2)%n<br>即</p>
+<p>(c1^s1*c2^s2)%n = (m^(e1^s1+e2^s2))%n<br>又前面提到</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = (m^(1))%n<br>(c1^s1</em>c2^s2)%n = m^%n<br>即</p>
+<p>c1^s1*c2^s2 = m<br>也就是证明了命题：当n不变的情况下，知道n,e1,e2,c1,c2 可以在不知道d1,d2情况下，解出m。</p>
+<h1 id="Pollard-rho整数分解"><a href="#Pollard-rho整数分解" class="headerlink" title="Pollard-rho整数分解"></a>Pollard-rho整数分解</h1><p>算法原理：生成两个整数a和b，计算p=gcd(a-b,n)，直到p不为1或者a,b出现循环为止，若p=n，则p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi-1 ^2+k，一般取k=1，若序列出现循环则退出。计算p=gcd(xi-1 - xi,n)，若p=1，返回上一步，直到p&gt;1为止。若p=n，则n为素数，否则p为n的一个约数并递归分解p和n/p.</p>
+<p>  实现代码如下：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;stdio.h&gt;
+
+const int Times = 10;
+const int N = 5500;
+
+using namespace std;
+typedef long long LL;
+
+LL ct, cnt;
+LL fac[N], num[N];
+
+LL gcd(LL a, LL b)
+{
+    return b? gcd(b, a % b) : a;
+}
+
+LL multi(LL a, LL b, LL m)
+{
+    LL ans = 0;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = (ans + a) % m;
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = (a + a) % m;
+    }
+    return ans;
+}
+
+LL quick_mod(LL a, LL b, LL m)
+{
+    LL ans = 1;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = multi(ans, a, m);
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = multi(a, a, m);
+    }
+    return ans;
+}
+
+bool Miller_Rabin(LL n)
+{
+    if(n == 2) return true;
+    if(n &lt; 2 || !(n &amp; 1)) return false;
+    LL m = n - 1;
+    int k = 0;
+    while((m &amp; 1) == 0)
+    {
+        k++;
+        m &gt;&gt;= 1;
+    }
+    for(int i=0; i&lt;Times; i++)
+    {
+        LL a = rand() % (n - 1) + 1;
+        LL x = quick_mod(a, m, n);
+        LL y = 0;
+        for(int j=0; j&lt;k; j++)
+        {
+            y = multi(x, x, n);
+            if(y == 1 &amp;&amp; x != 1 &amp;&amp; x != n - 1) return false;
+            x = y;
+        }
+        if(y != 1) return false;
+    }
+    return true;
+}
+
+LL pollard_rho(LL n, LL c)
+{
+    LL i = 1, k = 2;
+    LL x = rand() % (n - 1) + 1;
+    LL y = x;
+    while(true)
+    {
+        i++;
+        x = (multi(x, x, n) + c) % n;
+        LL d = gcd((y - x + n) % n, n);
+        if(1 &lt; d &amp;&amp; d &lt; n) return d;
+        if(y == x) return n;
+        if(i == k)
+        {
+            y = x;
+            k &lt;&lt;= 1;
+        }
+    }
+}
+
+void find(LL n, int c)
+{
+    if(n == 1) return;
+    if(Miller_Rabin(n))
+    {
+        fac[ct++] = n;
+        return ;
+    }
+    LL p = n;
+    LL k = c;
+    while(p &gt;= n) p = pollard_rho(p, c--);
+    find(p, k);
+    find(n / p, k);
+}
+
+int main()
+{
+    LL n;
+    while(cin&gt;&gt;n)
+    {
+        ct = 0;
+        find(n, 120);
+        sort(fac, fac + ct);
+        num[0] = 1;
+        int k = 1;
+        for(int i=1; i&lt;ct; i++)
+        {
+            if(fac[i] == fac[i-1])
+                ++num[k-1];
+            else
+            {
+                num[k] = 1;
+                fac[k++] = fac[i];
+            }
+        }
+        cnt = k;
+        for(int i=0; i&lt;cnt; i++)
+            cout&lt;&lt;fac[i]&lt;&lt;&quot;^&quot;&lt;&lt;num[i]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA共模攻击/" data-id="cjus78zpg0001gcuzuxiquxj7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/04/22/RSA例题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/04/22/RSA小指数攻击/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/22/makerctf-temp-wp/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA例题/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA共模攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA小指数攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA暴力破解/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

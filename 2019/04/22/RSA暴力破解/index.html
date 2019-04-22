@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="—title: RSA暴力破解date: 2019-02-01 19:27:45 tags:RSA的暴力破解#####回顾RSA加密过程 1.找到两个大素数p和q，计算出n=p×q 2.得到φ=(p−1)×(q−1)，然后选择一个e(1&amp;lt;e&amp;lt;φ)，且gcd(φ,e)=1，gcd为最大公约数，即e和φ互质 3.计算出d，计算方法:(e×d)%φ=1 4.得到了公私钥对，其中{e,n}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/RSA暴力破解/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="—title: RSA暴力破解date: 2019-02-01 19:27:45 tags:RSA的暴力破解#####回顾RSA加密过程 1.找到两个大素数p和q，计算出n=p×q 2.得到φ=(p−1)×(q−1)，然后选择一个e(1&amp;lt;e&amp;lt;φ)，且gcd(φ,e)=1，gcd为最大公约数，即e和φ互质 3.计算出d，计算方法:(e×d)%φ=1 4.得到了公私钥对，其中{e,n}">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd5615ad411.png">
+<meta property="og:updated_time" content="2019-04-22T05:51:13.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="—title: RSA暴力破解date: 2019-02-01 19:27:45 tags:RSA的暴力破解#####回顾RSA加密过程 1.找到两个大素数p和q，计算出n=p×q 2.得到φ=(p−1)×(q−1)，然后选择一个e(1&amp;lt;e&amp;lt;φ)，且gcd(φ,e)=1，gcd为最大公约数，即e和φ互质 3.计算出d，计算方法:(e×d)%φ=1 4.得到了公私钥对，其中{e,n}">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/22/5cbd5615ad411.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-RSA暴力破解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/22/RSA暴力破解/" class="article-date">
+  <time datetime="2019-04-22T05:27:45.567Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿﻿—<br>title: RSA暴力破解<br>date: 2019-02-01 19:27:45</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="RSA的暴力破解"><a href="#RSA的暴力破解" class="headerlink" title="RSA的暴力破解"></a>RSA的暴力破解</h1><p>#####回顾RSA加密过程</p>
+<p>1.找到两个大素数<em>p</em>和<em>q</em>，计算出<em>n=p×q</em></p>
+<p>2.得到<em>φ=(p−1)×(q−1)</em>，然后选择一个<em>e(1&lt;e&lt;φ)</em>，且<em>gcd(φ,e)=1</em>，<em>gcd</em>为最大公约数，即<em>e</em>和<em>φ</em>互质</p>
+<p>3.计算出<em>d</em>，计算方法:<em>(e×d)%φ=1</em></p>
+<p>4.得到了公私钥对，其中<em>{e,n}</em>为公钥，<em>{d,n}</em>为私钥。</p>
+<p>5.针对明文<em>M</em>进行加密：<em>C=Me%n</em>，得到的<em>C</em>即为密文</p>
+<p>6.针对密文<em>C</em>，进行解密，<em>M=Cd%n</em>，得到的<em>M</em>即为明文</p>
+<p>#####RSA的公钥是公开的，即对于知道<em>{e,n}</em>的数据，如果<em>n</em>比较小的话我们是可以暴力出结果的，这就是所谓的数学暴力攻击</p>
+<p>攻击方法一般是：给定RSA的公钥<em>{e,n}</em>，根据RSA的定义，如果能够将<em>n</em>分解为两个素数的乘积，即<em>n=p×q</em>，那么就可以计算出<em>d</em>了，也就是得到私钥<em>{d,n}</em><br>所以这种方法只能针对<em>n</em>的值非常小的情况下，基本最大就是<em>108</em>大小的，这应该就是<em>n</em>可以暴力的极限了，二进制位数为<em>32</em>位。</p>
+<p>#####已知n,e，我们可以暴力查找质数<em>p , q</em></p>
+<pre><code>for(int i = 1;i &lt; len;i ++){
+if(n % prime[i] == 0 &amp;&amp; isprime[n/prime[i]]){
+    //输出prime[i]和n/prime[i]
+    break;
+  }
+}
+</code></pre><p>#####c++代码算出d的值</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
+    if(b == 0) {
+    x = 1; y = 0;
+    return a;
+}
+    LL r = exgcd(b, a % b, x, y);
+    LL t = y;
+    y = x - a / b * y;
+    x = t;
+    return r;
+}
+
+/*可以得到x&gt;=bound时的x和y，返回true表示有解*/
+bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+    xx = xx * c / d; yy = yy * c / d;
+    LL t = (bound - xx) * d / b;
+
+    x = xx + b / d * t;
+    if(x &lt; bound) {
+        t++;
+        x = xx + b / d * t;
+        }
+        y = yy - a / d * t;
+        return true;
+    }
+
+int main(){
+    LL k = 792, e = 49;
+    LL x, y;
+    solve(e, k, 1, 0, x, y);
+    printf(&quot;%lld\n&quot;, x);
+    return 0;
+}
+</code></pre><p>#####c++破解代码</p>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL pow_LL(LL x, LL n, LL mod){
+   LL ret = 1;
+   while(n &gt; 0){
+    if(n &amp; 1) ret = ret * x % mod;
+    x = x * x % mod;
+    n &gt;&gt;= 1;
+   }
+    return ret;
+}
+
+int main(){
+    LL d = 97, n = 851;
+    LL arr[] = {617,673,319,695,16,252,299,319,657,346,767,299,346,88};
+    for(int i = 0;i &lt; 14;i ++){
+        printf(&quot;%c&quot;, pow_LL(arr[i], d, n));
+    }
+    return 0;
+}
+</code></pre><p>#####快速幂与快速幂取模</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd5615ad411.png" alt="Alt text"></p>
+<p>######快速幂代码<br>    int qsm(int a,int b)<br>    {<br>        int ans = 1,base = a;<br>        while(b != 0){<br>            if(b &amp; 1 != 0){   //用&amp;1来判断最后一位是0还是1，是1就乘当前权值<br>                ans <em>= base;<br>            }<br>            base </em>= base;    //更新权值<br>            b &gt;&gt;= 1;         //指数缩进<br>        }<br>        return ans;<br>    }</p>
+<p>######快速幂取模</p>
+<p>这个算法需要了解一下数论的一个定理：</p>
+<p>   <em>(a</em>b) mod c = ((a mod c)*<em>(</em>b mod c)) mod c*</p>
+<p>导出： <em>(a^b) mod c = (a mod c)^b mod c</em></p>
+<p>所以快速幂取模：</p>
+<pre><code>int pow_mod(int a,int b,int c){
+int ans = 1;
+int base = a%c;
+while(b){
+    if(b &amp; 1) ans = (ans*base)%c;
+    base = (base*base)%c;
+    b &gt;&gt;= 1;
+}
+return ans;
+}
+</code></pre><p>#####扩展欧几里得算法</p>
+<p>扩展欧几里得可以求解出<em>a⋅x+b⋅y=gcd(a,b)</em>中一个满足方程式的整数特解 </p>
+<p><em>g=gcd(a,b)      (1)</em></p>
+<p><em>a⋅x+b⋅y=g           (2)</em></p>
+<p><em>b⋅x1+(a mod b)⋅y1=g        (3)</em></p>
+<p>我们需要针对<em>(2)</em>和<em>(3)</em>找出他们之间的规律<br>很明显 </p>
+<p><em>amodb=a−</em>⌊<em>a/b</em>⌋<em>⋅b   (4)</em></p>
+<p>所以由<em>(3)</em>和<em>(4)</em>可得<em>(5)</em> </p>
+<p><em>b⋅x1+(a−</em>⌊<em>a/b</em>⌋<em>⋅b)⋅y1=g(5)</em></p>
+<p>化简<em>(5)</em>为<em>(6)</em> </p>
+<p><em>a⋅y1+b⋅(x1−</em>⌊<em>a/b</em>⌋<em>⋅y1)=g(6)</em></p>
+<p>我们联合<em>(2)</em>和<em>(6)</em>,可以得出下述公式： </p>
+<p><em>x=y1</em></p>
+<p><em>y=x1−</em>⌊<em>a/b</em>⌋<em>⋅y1</em></p>
+<p>其中我们书写代码的终止条件：<br><em>gcd(a,0)=a</em>为其终止点<br><em>a⋅1+0⋅0=a </em><br>所以当<em>b=0</em>时，<em>x=1，y=0</em><br>所以代码：</p>
+<pre><code>void ex_gcd(int a,int b, int &amp;d, int &amp;x, int &amp;y){
+if(!b){
+    x = 1
+    y = 0;
+    d = a;
+    return;
+}
+ex_gcd(b, a % b, d, y, x);
+y -= x * (a / b);
+}
+</code></pre><p>最终求出的<em>x</em>，<em>y</em>为<em>a⋅x+b⋅y=gcd(a,b)</em>的一个特解<br>然而解是可能有多个，因为<em>a⋅x+b⋅y=gcd(a,b)</em>可能是条直线<br>所以如何得知其它解呢<br>我们假设如果存在另外一个解<em>x2</em>，<em>y2</em>，那么可以列出下列方程： </p>
+<p><em>a⋅(x1−x2)=b⋅(y2−y1)</em></p>
+<p>两边同时除以g </p>
+<p><em>a′⋅(x1−x2)=b′⋅(y2−y1)</em></p>
+<p>其中<em>a′=a/g</em>，<em>b′=b/g</em>，且<em>a′</em>和<em>b′</em>一定互素，那么<em>(x1−x2)</em>一定为<em>b′</em>的倍数，即<em>(x1−x2)=k⋅a′</em>,代入公式得</p>
+<p><em>(y2−y1)=k⋅a′</em></p>
+<p>所以<em>a⋅x+b⋅y=gcd(a,b)</em>的一个特解为<em>(x0，y0)</em>的话，那么其任意整数解都可以写成<em>(x0+k⋅b′，y0−k⋅a′) </em></p>
+<p>#####扩展欧几里得算法的个模板</p>
+<pre><code>LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
+if(b == 0) {
+    x = 1; y = 0;
+    return a;
+}
+LL r = exgcd(b, a % b, x, y);
+LL t = y;
+y = x - a / b * y;
+x = t;
+return r;
+}
+
+/*可以得到x&gt;=bound时的x和y，返回true表示有解
+否则无解，我只想问这个模板无脑调用有木有~
+但是不同的题目特判不同，有的地方记得还是特判，比如a和b的正负和是否为0~*/
+bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+xx = xx * c / d; yy = yy * c / d;
+LL t = (bound - xx) * d / b;
+
+x = xx + b / d * t;
+if(x &lt; bound) {
+    t++;
+    x = xx + b / d * t;
+}
+y = yy - a / d * t;
+return true;
+ }
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/22/RSA暴力破解/" data-id="cjus78zpj0003gcuzhzw8gb9l" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/04/22/RSA小指数攻击/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/04/22/RSA总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/22/makerctf-temp-wp/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA例题/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA共模攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA小指数攻击/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/22/RSA暴力破解/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
