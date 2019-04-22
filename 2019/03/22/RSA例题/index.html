@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang>
+<html class="theme-next muse use-motion" lang="zh-cn">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,17 +79,30 @@
 
 
 
-<meta name="description" content="title: RSA总结date: 2019-02-24 22:38:33 tags:###RSA总结 ####核心函数 1.分解n， Pollard­rho整数分解，原理：生成两个整数a和b，计算p=gcd(a­b,n)，直到p不为1或者a,b出现循环为止，若p=n，则 p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi­1 ^2+k，一般取k=1，若 序列出现循环则退">
+<meta name="description" content="瞎找的题1.rsarsa  链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求L         n        d       解密 over通过，没问题  瞎找的题2.链接： http://ctf5.shiyanbar.com/crypto/RSAROLL.txt   已知n，e，c求m，而且ne">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2019/04/22/RSA总结/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="title: RSA总结date: 2019-02-24 22:38:33 tags:###RSA总结 ####核心函数 1.分解n， Pollard­rho整数分解，原理：生成两个整数a和b，计算p=gcd(a­b,n)，直到p不为1或者a,b出现循环为止，若p=n，则 p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi­1 ^2+k，一般取k=1，若 序列出现循环则退">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-22T05:27:02.752Z">
+<meta property="og:title" content="RSA例题">
+<meta property="og:url" content="http://pharke.github.io/2019/03/22/RSA例题/index.html">
+<meta property="og:site_name" content="Pharke&#39;s blog">
+<meta property="og:description" content="瞎找的题1.rsarsa  链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求L         n        d       解密 over通过，没问题  瞎找的题2.链接： http://ctf5.shiyanbar.com/crypto/RSAROLL.txt   已知n，e，c求m，而且ne">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54616b94e.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd5461749d6.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54617dad9.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54617e0a9.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd546188ddc.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54618f9a4.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54618fecf.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54619c2ac.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54619c33f.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd5461ba75f.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd555e73d4c.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd555e9cc31.png">
+<meta property="og:updated_time" content="2019-04-22T13:51:12.878Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="title: RSA总结date: 2019-02-24 22:38:33 tags:###RSA总结 ####核心函数 1.分解n， Pollard­rho整数分解，原理：生成两个整数a和b，计算p=gcd(a­b,n)，直到p不为1或者a,b出现循环为止，若p=n，则 p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi­1 ^2+k，一般取k=1，若 序列出现循环则退">
+<meta name="twitter:title" content="RSA例题">
+<meta name="twitter:description" content="瞎找的题1.rsarsa  链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求L         n        d       解密 over通过，没问题  瞎找的题2.链接： http://ctf5.shiyanbar.com/crypto/RSAROLL.txt   已知n，e，c求m，而且ne">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/22/5cbd54616b94e.png">
 
 
 
@@ -119,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/22/RSA总结/">
+  <link rel="canonical" href="http://pharke.github.io/2019/03/22/RSA例题/">
 
 
 
 
 
-  <title> | Hexo</title>
+  <title>RSA例题 | Pharke's blog</title>
   
 
 
@@ -137,7 +150,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
 
   
   
@@ -155,12 +168,12 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">Pharke's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">win or lose none knows</p>
       
   </div>
 
@@ -232,16 +245,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/RSA总结/">
+    <link itemprop="mainEntityOfPage" href="http://pharke.github.io/2019/03/22/RSA例题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="pharke">
       <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Pharke's blog">
     </span>
 
     
@@ -249,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">RSA例题</h1>
         
 
         <div class="post-meta">
@@ -261,8 +274,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T13:25:33+08:00">
-                2019-04-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-22T22:38:57+08:00">
+                2019-03-22
               </time>
             
 
@@ -299,253 +312,32 @@
       
 
       
-        <hr>
-<p>title: RSA总结<br>date: 2019-02-24 22:38:33</p>
-<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p>###RSA总结</p>
-<p>####核心函数</p>
-<p>1.分解n，</p>
-<p>Pollard­rho整数分解，原理：生成两个整数a和b，计算p=gcd(a­b,n)，直到p不为1或者a,b出现循环为止，若p=n，则 p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi­1 ^2+k，一般取k=1，若 序列出现循环则退出。计算p=gcd(xi­1 ­ xi,n)，若p=1，返回上一步，直到p&gt;1为止。若p=n，则n为 素数，否则p为n的一个约数并递归分解p和n/p</p>
-<p>c++代码</p>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-#include &lt;algorithm&gt;
-#include &lt;stdio.h&gt;
-
-const int Times = 10;
-const int N = 5500;
-
-using namespace std;
-typedef long long LL;
-
-LL ct, cnt;
-LL fac[N], num[N];
-
-LL gcd(LL a, LL b)
-{
-    return b? gcd(b, a % b) : a;
-}
-
-LL multi(LL a, LL b, LL m)
-{
-    LL ans = 0;
-    a %= m;
-    while(b)
-    {
-        if(b &amp; 1)
-        {
-            ans = (ans + a) % m;
-            b--;
-        }
-        b &gt;&gt;= 1;
-        a = (a + a) % m;
-    }
-    return ans;
-}
-
-LL quick_mod(LL a, LL b, LL m)
-{
-    LL ans = 1;
-    a %= m;
-    while(b)
-    {
-        if(b &amp; 1)
-        {
-            ans = multi(ans, a, m);
-            b--;
-        }
-        b &gt;&gt;= 1;
-        a = multi(a, a, m);
-    }
-    return ans;
-}
-
-bool Miller_Rabin(LL n)
-{
-    if(n == 2) return true;
-    if(n &lt; 2 || !(n &amp; 1)) return false;
-    LL m = n - 1;
-    int k = 0;
-    while((m &amp; 1) == 0)
-    {
-        k++;
-        m &gt;&gt;= 1;
-    }
-    for(int i=0; i&lt;Times; i++)
-    {
-        LL a = rand() % (n - 1) + 1;
-        LL x = quick_mod(a, m, n);
-        LL y = 0;
-        for(int j=0; j&lt;k; j++)
-        {
-            y = multi(x, x, n);
-            if(y == 1 &amp;&amp; x != 1 &amp;&amp; x != n - 1) return false;
-            x = y;
-        }
-        if(y != 1) return false;
-    }
-    return true;
-}
-
-LL pollard_rho(LL n, LL c)
-{
-    LL i = 1, k = 2;
-    LL x = rand() % (n - 1) + 1;
-    LL y = x;
-    while(true)
-    {
-        i++;
-        x = (multi(x, x, n) + c) % n;
-        LL d = gcd((y - x + n) % n, n);
-        if(1 &lt; d &amp;&amp; d &lt; n) return d;
-        if(y == x) return n;
-        if(i == k)
-        {
-            y = x;
-            k &lt;&lt;= 1;
-        }
-    }
-}
-
-void find(LL n, int c)
-{
-    if(n == 1) return;
-    if(Miller_Rabin(n))
-    {
-        fac[ct++] = n;
-        return ;
-    }
-    LL p = n;
-    LL k = c;
-    while(p &gt;= n) p = pollard_rho(p, c--);
-    find(p, k);
-    find(n / p, k);
-}
-
-int main()
-{
-    LL n;
-    while(cin&gt;&gt;n)
-    {
-        ct = 0;
-        find(n, 120);
-        sort(fac, fac + ct);
-        num[0] = 1;
-        int k = 1;
-        for(int i=1; i&lt;ct; i++)
-        {
-            if(fac[i] == fac[i-1])
-                ++num[k-1];
-            else
-            {
-                num[k] = 1;
-                fac[k++] = fac[i];
-            }
-        }
-        cnt = k;
-        for(int i=0; i&lt;cnt; i++)
-            cout&lt;&lt;fac[i]&lt;&lt;&quot;^&quot;&lt;&lt;num[i]&lt;&lt;&quot; &quot;;
-        cout&lt;&lt;endl;
-    }
-    return 0;
-}
-</code></pre><p>2.求n1、n2公约数</p>
-<p>欧几里得算法（辗转相除法）<br>py代码</p>
-<pre><code>def gcd(a, b):
-if a &lt; b:
-    a, b = b, a
-while b != 0:
-    temp = a % b
-     a = b
-     b = temp
-def gcd_digui(a, b):
-    if b != 0:
-           return a
-    return gcd(b,a%b)
-
-p = gcd(n1,n2)
-</code></pre><p>3.求d：</p>
-<p>c++代码：</p>
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-#include &lt;algorithm&gt;
-
-using namespace std;
-
-typedef long long LL;
-
-LL exgcd(LL a, LL b, LL &amp;x, LL &amp;y) {
-    if(b == 0) {
-    x = 1; y = 0;
-    return a;
-}
-    LL r = exgcd(b, a % b, x, y);
-    LL t = y;
-    y = x - a / b * y;
-    x = t;
-    return r;
-}
-
-/*可以得到x&gt;=bound时的x和y，返回true表示有解*/
-bool solve(LL a, LL b, LL c, LL bound, LL &amp;x, LL &amp;y) {
-    LL xx, yy, d = exgcd(a, b, xx, yy);
-    if(c % d) return false;
-
-    xx = xx * c / d; yy = yy * c / d;
-    LL t = (bound - xx) * d / b;
-
-    x = xx + b / d * t;
-    if(x &lt; bound) {
-        t++;
-        x = xx + b / d * t;
-        }
-        y = yy - a / d * t;
-        return true;
-    }
-
-int main(){
-    LL k , e ;
-    LL x, y;
-    cin&gt;&gt;e&gt;&gt;k;
-    solve(e, k, 1, 0, x, y);
-    printf(&quot;%lld\n&quot;, x);
-    return 0;
-}
-</code></pre><p>5.加解密</p>
-<p>c++代码：</p>
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-#include &lt;algorithm&gt;
-
-using namespace std;
-
-typedef long long LL;
-
-LL pow_LL(LL x, LL n, LL mod){
-   LL ret = 1;
-   while(n &gt; 0){
-    if(n &amp; 1) ret = ret * x % mod;
-    x = x * x % mod;
-    n &gt;&gt;= 1;
-   }
-    return ret;
-}
-
-int main(){
-    LL de , n ,i = 0;
-    LL arr[100]={0};
-    cin&gt;&gt;de&gt;&gt;n;
-    for(while(scanf(&quot;%LL&quot;, &amp;arr[i]))) i++;
-    for(int i = 0;arr[i];i ++){
-        printf(&quot;%c&quot;, pow_LL(arr[i], d, n));
-    }
-    return 0;
-}
-</code></pre><p>###常用方法：</p>
-<p>1.暴力计算<br> 对于LL内的n，暴力计算，p和q存在相差过大或者过近时用yafu</p>
-<p>2.利用公约数<br>有多个极大的n，考虑求gcd</p>
-<p>3.小指数攻击<br>e较小时，可能有n &gt; pow(m, e)，所以c = pow(m,e, N) = pow(m, e)，故对密文三次开方，即可得到明文。<br>或者pow(m, e) &gt; n，但是不是足够，假设存在这样的k，有下列的公式成立：<br>c = pow(m, e) + k <em> n<br>爆破k，当且仅当c ­ (k </em> n)可以开三次方，c ­ (k * n)开三次方结果就是明文m。</p>
-<p>4.共模攻击<br>假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，求e1<em>s1+e2</em>s2 = 1 ，可以用c1^s1*c2^s2 = m来求名文  </p>
+        <ul>
+<li><h1 id="瞎找的题1-rsarsa"><a href="#瞎找的题1-rsarsa" class="headerlink" title="瞎找的题1.rsarsa"></a>瞎找的题1.rsarsa</h1></li>
+</ul>
+<p>链接   <a href="http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt</a></p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd54616b94e.png" alt="Alt text"></p>
+<p>p，q知道而且e很大，直接暴力</p>
+<p>先求<br>L        <img src="https://i.loli.net/2019/04/22/5cbd5461749d6.png" alt="Alt text"></p>
+<p>n       <img src="https://i.loli.net/2019/04/22/5cbd54617dad9.png" alt="Alt text"></p>
+<p>d      <img src="https://i.loli.net/2019/04/22/5cbd54617e0a9.png" alt="Alt text"></p>
+<p>解密<br><img src="https://i.loli.net/2019/04/22/5cbd546188ddc.png" alt="Alt text"></p>
+<p>over<br><img src="https://i.loli.net/2019/04/22/5cbd54618f9a4.png" alt="Alt text"><br>通过，没问题<br><img src="https://i.loli.net/2019/04/22/5cbd54618fecf.png" alt="Alt text"></p>
+<ul>
+<li><h1 id="瞎找的题2"><a href="#瞎找的题2" class="headerlink" title="瞎找的题2."></a>瞎找的题2.</h1>链接： <a href="http://ctf5.shiyanbar.com/crypto/RSAROLL.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/RSAROLL.txt</a></li>
+</ul>
+<p><img src="https://i.loli.net/2019/04/22/5cbd54619c2ac.png" alt="Alt text"></p>
+<p>已知n，e，c求m，而且ne都不大<br>暴力</p>
+<p>查p，q<br><img src="https://i.loli.net/2019/04/22/5cbd54619c33f.png" alt="Alt text"></p>
+<p>同上解密</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd5461ba75f.png" alt="Alt text"></p>
+<p>bingo</p>
+<p><img src="https://i.loli.net/2019/04/22/5cbd555e73d4c.png" alt="Alt text"></p>
+<ul>
+<li><h1 id="瞎找的题3"><a href="#瞎找的题3" class="headerlink" title="瞎找的题3."></a>瞎找的题3.</h1>链接：<a href="http://ctf5.shiyanbar.com/crypto/enc.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/enc.txt</a></li>
+</ul>
+<p><img src="https://i.loli.net/2019/04/22/5cbd555e9cc31.png" alt="Alt text"></p>
+<p>一看就是我做不出来的题，下周见</p>
 
       
     </div>
@@ -570,8 +362,8 @@ int main(){
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/22/hello-world/" rel="next" title>
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2019/02/24/RSA总结/" rel="next" title="RSA总结">
+                <i class="fa fa-chevron-left"></i> RSA总结
               </a>
             
           </div>
@@ -580,8 +372,8 @@ int main(){
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/22/RSA暴力破解/" rel="prev" title>
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/11/makerctf-temp-wp/" rel="prev" title="makerctf_temp_wp">
+                makerctf_temp_wp <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -648,8 +440,8 @@ int main(){
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-author-name" itemprop="name">pharke</p>
+              <p class="site-description motion-element" itemprop="description">build by hexo</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -659,7 +451,7 @@ int main(){
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -696,7 +488,7 @@ int main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags"><span class="nav-number">1.</span> <span class="nav-text">tags:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题1-rsarsa"><span class="nav-number">1.</span> <span class="nav-text">瞎找的题1.rsarsa</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题2"><span class="nav-number">2.</span> <span class="nav-text">瞎找的题2.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题3"><span class="nav-number">3.</span> <span class="nav-text">瞎找的题3.</span></a></li></ol></div>
             
 
           </div>
@@ -720,7 +512,7 @@ int main(){
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">pharke</span>
 
   
 </div>

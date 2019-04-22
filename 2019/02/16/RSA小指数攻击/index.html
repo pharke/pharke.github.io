@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang>
+<html class="theme-next muse use-motion" lang="zh-cn">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,30 +79,17 @@
 
 
 
-<meta name="description" content="—title: RSA例题date: 2019-03-10 13:28:40 tags:瞎找的题1.rsarsa链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求 ##L         ##n        ##d       解密 over通过，没问题 瞎找的题2.链接： http://ctf5.">
+<meta name="description" content="RSA小指数e攻击如果RSA系统的公钥e选取较小的值，可以使得加密和验证签名的速度有所提高，但是如果e的选取太小，就容易受到攻击。  有三个分别使用不同的模数n1,n2,n3，但是都选取e=3，加密同一个明文可以得到： c1 = pow(m,3,n1)c2 = pow(m,3,n2)c3 = pow(m,3,n3) 一般情况下，n1,n2,n3互素，否则会比较容易求出公因子，从而安全性大幅度的减">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2019/04/22/RSA例题/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="—title: RSA例题date: 2019-03-10 13:28:40 tags:瞎找的题1.rsarsa链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求 ##L         ##n        ##d       解密 over通过，没问题 瞎找的题2.链接： http://ctf5.">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54616b94e.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd5461749d6.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54617dad9.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54617e0a9.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd546188ddc.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54618f9a4.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54618fecf.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54619c2ac.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd54619c33f.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd5461ba75f.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd555e73d4c.png">
-<meta property="og:image" content="https://i.loli.net/2019/04/22/5cbd555e9cc31.png">
-<meta property="og:updated_time" content="2019-04-22T05:48:23.143Z">
+<meta property="og:title" content="RSA小指数攻击">
+<meta property="og:url" content="http://pharke.github.io/2019/02/16/RSA小指数攻击/index.html">
+<meta property="og:site_name" content="Pharke&#39;s blog">
+<meta property="og:description" content="RSA小指数e攻击如果RSA系统的公钥e选取较小的值，可以使得加密和验证签名的速度有所提高，但是如果e的选取太小，就容易受到攻击。  有三个分别使用不同的模数n1,n2,n3，但是都选取e=3，加密同一个明文可以得到： c1 = pow(m,3,n1)c2 = pow(m,3,n2)c3 = pow(m,3,n3) 一般情况下，n1,n2,n3互素，否则会比较容易求出公因子，从而安全性大幅度的减">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-04-22T13:52:18.623Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="—title: RSA例题date: 2019-03-10 13:28:40 tags:瞎找的题1.rsarsa链接   http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt  p，q知道而且e很大，直接暴力 先求 ##L         ##n        ##d       解密 over通过，没问题 瞎找的题2.链接： http://ctf5.">
-<meta name="twitter:image" content="https://i.loli.net/2019/04/22/5cbd54616b94e.png">
+<meta name="twitter:title" content="RSA小指数攻击">
+<meta name="twitter:description" content="RSA小指数e攻击如果RSA系统的公钥e选取较小的值，可以使得加密和验证签名的速度有所提高，但是如果e的选取太小，就容易受到攻击。  有三个分别使用不同的模数n1,n2,n3，但是都选取e=3，加密同一个明文可以得到： c1 = pow(m,3,n1)c2 = pow(m,3,n2)c3 = pow(m,3,n3) 一般情况下，n1,n2,n3互素，否则会比较容易求出公因子，从而安全性大幅度的减">
 
 
 
@@ -132,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/22/RSA例题/">
+  <link rel="canonical" href="http://pharke.github.io/2019/02/16/RSA小指数攻击/">
 
 
 
 
 
-  <title> | Hexo</title>
+  <title>RSA小指数攻击 | Pharke's blog</title>
   
 
 
@@ -150,7 +137,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
 
   
   
@@ -168,12 +155,12 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">Pharke's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">win or lose none knows</p>
       
   </div>
 
@@ -245,16 +232,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/RSA例题/">
+    <link itemprop="mainEntityOfPage" href="http://pharke.github.io/2019/02/16/RSA小指数攻击/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="pharke">
       <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Pharke's blog">
     </span>
 
     
@@ -262,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">RSA小指数攻击</h1>
         
 
         <div class="post-meta">
@@ -274,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T13:28:40+08:00">
-                2019-04-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-16T20:39:06+08:00">
+                2019-02-16
               </time>
             
 
@@ -312,29 +299,90 @@
       
 
       
-        <p>﻿﻿—<br>title: RSA例题<br>date: 2019-03-10 13:28:40</p>
-<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><h1 id="瞎找的题1-rsarsa"><a href="#瞎找的题1-rsarsa" class="headerlink" title="瞎找的题1.rsarsa"></a>瞎找的题1.rsarsa</h1><p>链接   <a href="http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/rsarsa/rsa.txt</a></p>
-<p><img src="https://i.loli.net/2019/04/22/5cbd54616b94e.png" alt="Alt text"></p>
-<p>p，q知道而且e很大，直接暴力</p>
-<p>先求</p>
-<p>##L        <img src="https://i.loli.net/2019/04/22/5cbd5461749d6.png" alt="Alt text"></p>
-<p>##n       <img src="https://i.loli.net/2019/04/22/5cbd54617dad9.png" alt="Alt text"></p>
-<p>##d      <img src="https://i.loli.net/2019/04/22/5cbd54617e0a9.png" alt="Alt text"></p>
-<p>解密<br><img src="https://i.loli.net/2019/04/22/5cbd546188ddc.png" alt="Alt text"></p>
-<p>over<br><img src="https://i.loli.net/2019/04/22/5cbd54618f9a4.png" alt="Alt text"><br>通过，没问题<br><img src="https://i.loli.net/2019/04/22/5cbd54618fecf.png" alt="Alt text"></p>
-<h1 id="瞎找的题2"><a href="#瞎找的题2" class="headerlink" title="瞎找的题2."></a>瞎找的题2.</h1><p>链接： <a href="http://ctf5.shiyanbar.com/crypto/RSAROLL.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/RSAROLL.txt</a></p>
-<p><img src="https://i.loli.net/2019/04/22/5cbd54619c2ac.png" alt="Alt text"></p>
-<p>已知n，e，c求m，而且ne都不大</p>
-<p>####暴力</p>
-<p>查p，q<br><img src="https://i.loli.net/2019/04/22/5cbd54619c33f.png" alt="Alt text"></p>
-<p>同上解密</p>
-<p><img src="https://i.loli.net/2019/04/22/5cbd5461ba75f.png" alt="Alt text"></p>
-<p>bingo</p>
-<p><img src="https://i.loli.net/2019/04/22/5cbd555e73d4c.png" alt="Alt text"></p>
-<h1 id="瞎找的题3"><a href="#瞎找的题3" class="headerlink" title="瞎找的题3."></a>瞎找的题3.</h1><p>链接：<a href="http://ctf5.shiyanbar.com/crypto/enc.txt" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/crypto/enc.txt</a></p>
-<p><img src="https://i.loli.net/2019/04/22/5cbd555e9cc31.png" alt="Alt text"></p>
-<p>一看就是我做不出来的题，下周见</p>
+        <ul>
+<li><h1 id="RSA小指数e攻击"><a href="#RSA小指数e攻击" class="headerlink" title="RSA小指数e攻击"></a>RSA小指数e攻击</h1>如果RSA系统的公钥e选取较小的值，可以使得加密和验证签名的速度有所提高，但是如果e的选取太小，就容易受到攻击。</li>
+</ul>
+<p>有三个分别使用不同的模数n1,n2,n3，但是都选取e=3，加密同一个明文可以得到：</p>
+<p>c1 = pow(m,3,n1)<br>c2 = pow(m,3,n2)<br>c3 = pow(m,3,n3)</p>
+<p>一般情况下，n1,n2,n3互素，否则会比较容易求出公因子，从而安全性大幅度的减低。</p>
+<ul>
+<li><h1 id="RSA选择密文攻击"><a href="#RSA选择密文攻击" class="headerlink" title="RSA选择密文攻击"></a>RSA选择密文攻击</h1>在此种攻击模型中，攻击者需要掌握的内容包括：加密算法、截获的部分密文、自己选择的密文消息以及相应的被解密的明文。</li>
+</ul>
+<ul>
+<li>利用公约数</li>
+</ul>
+<ul>
+<li><p>思路<br>如果两次加密的n1和n2具有相同的素因子，可以利用欧几里德算法直接分解n1和n2.<br>通过欧几里德算法计算出两个n的最大公约数p：</p>
+<p>  def gcd(a, b):<br>  if a &lt; b:</p>
+<pre><code>a, b = b, a
+</code></pre><p>  while b != 0:</p>
+<pre><code>temp = a % b
+ a = b
+ b = temp
+</code></pre><p>  def gcd_digui(a, b):</p>
+<pre><code>if b != 0:
+       return a
+return gcd(b,a%b)
+</code></pre><p>  p = gcd(n1,n2)</p>
+</li>
+</ul>
+<p>识别此类题目，通常会发现题目给了若干个n，均不相同，并且都是2048bit，4096bit级别，无法正面硬杠，并且明文都没什么联系，e也一般取65537。<br>而欧几里得算法的时间复杂度为：O(log n)。这个时间复杂度即便是4096 bit也是秒破级别<br>根据欧几里德算法算出的p之后，再用n除以p即可求出q，由此可以得到的参数有p、q、n、e，再使用常规方法计算出d，即可破解密文。</p>
+<ul>
+<li>低加密指数攻击<br>在RSA中的e被称为加密指数。由于e的选择只需要满足以下条件即可</li>
+</ul>
+<p>计算欧拉函数 φ = (p-1) * (q-1)，然后选择一个e(1&lt;e&lt;φ)，并且e和φ互质</p>
+<p>选择小的e可以缩短加密时间，但是选择的e不当，可能会造成严重的安全问题。<br>e=3的小明文攻击<br>当e=3，并且明文过小时，导致明文的三次方仍然小于n，通过直接对密文三次开方，即可得到明文。<br>原理如下</p>
+<p>对明文m进行加密：c = pow(m, 3, N),可以得到密文c。<br>因为n &gt; pow(m, 3)，所以c = pow(m, 3, N) = pow(m, 3)，故对密文三次开方，即可得到明文。</p>
+<p>有一种特殊的情况是：pow(m, 3) &gt; n，但是不是足够，假设存在这样的k，有下列的公式成立：</p>
+<p>c = pow(m, 3) + k * n</p>
+<p>爆破k，当且仅当c - (k <em> n)可以开三次方，c - (k </em> n)开三次方结果就是明文m。</p>
+<ul>
+<li>欧拉函数<br>缩写ϕ，程序中一般用phi(n)来表示，求解出小于n且与n互质的正整数的个数<br>我们针对一个n，可以将它化为如下式子： </li>
+</ul>
+<p>n=p^q1⋅p^q2⋅p^q3⋅⋅⋅⋅p^qn</p>
+<p>从而可以得出如下公式： </p>
+<p>phi(n)=n⋅(1−1/p1)⋅(1−1/p2)⋅(1−1/p3)⋅⋅⋅⋅(1−1/pn)</p>
+<p>简化： </p>
+<p>phi(n)=n⋅((p1−1)/p1)⋅((p2−1)/p2)⋅((p3−1)/p3)⋅⋅⋅⋅((pn−1)/pn)</p>
+<p>通过下述公式我们可以写出如下代码：</p>
+<pre><code>/*
+ *函数名称：phi
+ *参数n：需要求解的欧拉函数值
+*/
+int phi(int n){
+    int res = n;//int -&gt; LL
+    for(int i = 2;i &lt;= sqrt(n);i ++){
+        if(n % i == 0){
+            res = res / i * (i - 1);
+            while(n % i == 0) n /= i;
+        }
+    }
+    if(n &gt; 1) res = res / n * (n - 1);
+    return res;
+}
+</code></pre><p>先进行除法是为了防止中间数据溢出</p>
+<p>欧拉函数求出的结果有以下几种性质：</p>
+<p>1.除了n=2外，phi(n)≡0(mod2即phi(n)求出的结果为偶数<br>2.phi(n)为积性函数，但不是完全积性函数，phi(n⋅m)=phi(n)⋅phi(m)当且仅当gcd(n,m)==1时成立</p>
+<p>3.一个数的所有质因子之和为：phi(n)⋅n/2.因为gcd(n,i)=1所以gcd(n,n−i)==1,如此f(n)=(a1+n−a1)+(a2+n−a2)+⋅⋅⋅+(an+n−an)由于an和n−an都是与n互质，所以最终的结果f(n)=phi(n)⋅n，由于算了两倍质数，所以最后要除以2，得出phi(n)⋅n/2.</p>
+<p>单单以第一份代码求解的话，求解一个数的欧拉函数值的复杂度为O(sqrt(n))，所以求解n范围内每一个数的欧拉函数值的复杂度为O(n⋅sqrt(n))，很明显，当数据大于105以上后明显是不够看的。我们可以根据求解大范围素数的方法求解欧拉函数值即筛选法求欧拉函数值.</p>
+<p>代码如下：</p>
+<pre><code>const int MAXN = 1e6 + 5;
+int phiArr[MAXN];
 
+void phi(void) {
+    phiArr[1] = 1;
+    for(int i = 2; i &lt; MAXN; i ++) {
+        phiArr[i] = i;
+    }
+    for(int i = 2; i &lt; MAXN; i ++) {
+        if(phiArr[i] == i) {
+            for(int j = i; j &lt; MAXN; j += i) {
+                phiArr[j] = phiArr[j] / i * (i - 1);
+           }
+        }
+    }
+}
+</code></pre>
       
     </div>
     
@@ -358,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/22/RSA共模攻击/" rel="next" title>
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2019/02/08/RSA共模攻击/" rel="next" title="RSA共模攻击">
+                <i class="fa fa-chevron-left"></i> RSA共模攻击
               </a>
             
           </div>
@@ -368,8 +416,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/22/makerctf-temp-wp/" rel="prev" title>
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/24/RSA总结/" rel="prev" title="RSA总结">
+                RSA总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -436,8 +484,8 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-author-name" itemprop="name">pharke</p>
+              <p class="site-description motion-element" itemprop="description">build by hexo</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -447,7 +495,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -484,7 +532,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags"><span class="nav-number">1.</span> <span class="nav-text">tags:</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题1-rsarsa"><span class="nav-number"></span> <span class="nav-text">瞎找的题1.rsarsa</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题2"><span class="nav-number"></span> <span class="nav-text">瞎找的题2.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#瞎找的题3"><span class="nav-number"></span> <span class="nav-text">瞎找的题3.</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA小指数e攻击"><span class="nav-number">1.</span> <span class="nav-text">RSA小指数e攻击</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA选择密文攻击"><span class="nav-number">2.</span> <span class="nav-text">RSA选择密文攻击</span></a></li></ol></div>
             
 
           </div>
@@ -508,7 +556,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">pharke</span>
 
   
 </div>
