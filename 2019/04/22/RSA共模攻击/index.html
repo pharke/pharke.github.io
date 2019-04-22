@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="title: RSA共模攻击 date: 2019-02-08 17:28:08rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2互质 即">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/RSA共模攻击/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="title: RSA共模攻击 date: 2019-02-08 17:28:08rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2互质 即">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-22T10:58:36.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="title: RSA共模攻击 date: 2019-02-08 17:28:08rsa共模攻击假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论： c1 = pow(m, e1, N)c2 = pow(m, e2, N) 分别拿对应的私钥来加密，可以得到相同的明文m m = pow(c1, d1, N)m = pow(c2, d2, N) 首先假设，e1，e2互质 即">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/22/RSA共模攻击/">
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/RSA共模攻击/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T13:28:08+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<p>title: RSA共模攻击</p>
+<h2 id="date-2019-02-08-17-28-08"><a href="#date-2019-02-08-17-28-08" class="headerlink" title="date: 2019-02-08 17:28:08"></a>date: 2019-02-08 17:28:08</h2><h1 id="rsa共模攻击"><a href="#rsa共模攻击" class="headerlink" title="rsa共模攻击"></a>rsa共模攻击</h1><p>假如采用两个或者两个以上的公钥(N,e)来加密同一条信息，可以得到下面的结论：</p>
+<p>c1 = pow(m, e1, N)<br>c2 = pow(m, e2, N)</p>
+<p>分别拿对应的私钥来加密，可以得到相同的明文m</p>
+<p>m = pow(c1, d1, N)<br>m = pow(c2, d2, N)</p>
+<p>首先假设，e1，e2互质</p>
+<p>即</p>
+<p>gcd(e1,e2)=1<br>此时则有</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>式中，s1、s2皆为整数，但是一正一负。</p>
+<p>通过扩展欧几里德算法，我们可以得到该式子的一组解（s1,s2），假设s1为正数,s2为负数.</p>
+<p>因为</p>
+<p>c1 = m^e1%n<br>c2 = m^e2%n<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1%n)^s1</em>(m^e2%n)^s2)%n<br>根据模运算性质，可以化简为</p>
+<p>(c1^s1<em>c2^s2)%n = ((m^e1)^s1</em>(m^e2)^s2)%n<br>即</p>
+<p>(c1^s1*c2^s2)%n = (m^(e1^s1+e2^s2))%n<br>又前面提到</p>
+<p>e1<em>s1+e2</em>s2 = 1<br>所以</p>
+<p>(c1^s1<em>c2^s2)%n = (m^(1))%n<br>(c1^s1</em>c2^s2)%n = m^%n<br>即</p>
+<p>c1^s1*c2^s2 = m<br>也就是证明了命题：当n不变的情况下，知道n,e1,e2,c1,c2 可以在不知道d1,d2情况下，解出m。</p>
+<h1 id="Pollard-rho整数分解"><a href="#Pollard-rho整数分解" class="headerlink" title="Pollard-rho整数分解"></a>Pollard-rho整数分解</h1><p>算法原理：生成两个整数a和b，计算p=gcd(a-b,n)，直到p不为1或者a,b出现循环为止，若p=n，则p为质数，否则p为n的一个约数。选取一个小的随机数x1，迭代生成xi=xi-1 ^2+k，一般取k=1，若序列出现循环则退出。计算p=gcd(xi-1 - xi,n)，若p=1，返回上一步，直到p&gt;1为止。若p=n，则n为素数，否则p为n的一个约数并递归分解p和n/p.</p>
+<p>  实现代码如下：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;stdio.h&gt;
+
+const int Times = 10;
+const int N = 5500;
+
+using namespace std;
+typedef long long LL;
+
+LL ct, cnt;
+LL fac[N], num[N];
+
+LL gcd(LL a, LL b)
+{
+    return b? gcd(b, a % b) : a;
+}
+
+LL multi(LL a, LL b, LL m)
+{
+    LL ans = 0;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = (ans + a) % m;
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = (a + a) % m;
+    }
+    return ans;
+}
+
+LL quick_mod(LL a, LL b, LL m)
+{
+    LL ans = 1;
+    a %= m;
+    while(b)
+    {
+        if(b &amp; 1)
+        {
+            ans = multi(ans, a, m);
+            b--;
+        }
+        b &gt;&gt;= 1;
+        a = multi(a, a, m);
+    }
+    return ans;
+}
+
+bool Miller_Rabin(LL n)
+{
+    if(n == 2) return true;
+    if(n &lt; 2 || !(n &amp; 1)) return false;
+    LL m = n - 1;
+    int k = 0;
+    while((m &amp; 1) == 0)
+    {
+        k++;
+        m &gt;&gt;= 1;
+    }
+    for(int i=0; i&lt;Times; i++)
+    {
+        LL a = rand() % (n - 1) + 1;
+        LL x = quick_mod(a, m, n);
+        LL y = 0;
+        for(int j=0; j&lt;k; j++)
+        {
+            y = multi(x, x, n);
+            if(y == 1 &amp;&amp; x != 1 &amp;&amp; x != n - 1) return false;
+            x = y;
+        }
+        if(y != 1) return false;
+    }
+    return true;
+}
+
+LL pollard_rho(LL n, LL c)
+{
+    LL i = 1, k = 2;
+    LL x = rand() % (n - 1) + 1;
+    LL y = x;
+    while(true)
+    {
+        i++;
+        x = (multi(x, x, n) + c) % n;
+        LL d = gcd((y - x + n) % n, n);
+        if(1 &lt; d &amp;&amp; d &lt; n) return d;
+        if(y == x) return n;
+        if(i == k)
+        {
+            y = x;
+            k &lt;&lt;= 1;
+        }
+    }
+}
+
+void find(LL n, int c)
+{
+    if(n == 1) return;
+    if(Miller_Rabin(n))
+    {
+        fac[ct++] = n;
+        return ;
+    }
+    LL p = n;
+    LL k = c;
+    while(p &gt;= n) p = pollard_rho(p, c--);
+    find(p, k);
+    find(n / p, k);
+}
+
+int main()
+{
+    LL n;
+    while(cin&gt;&gt;n)
+    {
+        ct = 0;
+        find(n, 120);
+        sort(fac, fac + ct);
+        num[0] = 1;
+        int k = 1;
+        for(int i=1; i&lt;ct; i++)
+        {
+            if(fac[i] == fac[i-1])
+                ++num[k-1];
+            else
+            {
+                num[k] = 1;
+                fac[k++] = fac[i];
+            }
+        }
+        cnt = k;
+        for(int i=0; i&lt;cnt; i++)
+            cout&lt;&lt;fac[i]&lt;&lt;&quot;^&quot;&lt;&lt;num[i]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/22/RSA小指数攻击/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/22/RSA例题/" rel="prev" title>
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#date-2019-02-08-17-28-08"><span class="nav-number">1.</span> <span class="nav-text">date: 2019-02-08 17:28:08</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#rsa共模攻击"><span class="nav-number"></span> <span class="nav-text">rsa共模攻击</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pollard-rho整数分解"><span class="nav-number"></span> <span class="nav-text">Pollard-rho整数分解</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
