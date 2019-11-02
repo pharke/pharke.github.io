@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一题简单的rsa题目有一个py代码一个输出文件： import gmpy2 from fractions import Fraction from secret import flag,e from libnum import * from os import urandom k = 1024 p = gmpy2.next_prime(int(urandom(k / 8).encode(&amp;apos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一题简单的rsa">
+<meta property="og:url" content="http://pharke.github.io/2019/11/02/一题简单的rsa/index.html">
+<meta property="og:site_name" content="Pharke&#39;s blog">
+<meta property="og:description" content="一题简单的rsa题目有一个py代码一个输出文件： import gmpy2 from fractions import Fraction from secret import flag,e from libnum import * from os import urandom k = 1024 p = gmpy2.next_prime(int(urandom(k / 8).encode(&amp;apos">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://i.loli.net/2019/11/02/yDmMtuIYvBfCZcE.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/02/74B2hwJAKkpNlE6.png">
+<meta property="og:updated_time" content="2019-11-02T04:52:26.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一题简单的rsa">
+<meta name="twitter:description" content="一题简单的rsa题目有一个py代码一个输出文件： import gmpy2 from fractions import Fraction from secret import flag,e from libnum import * from os import urandom k = 1024 p = gmpy2.next_prime(int(urandom(k / 8).encode(&amp;apos">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/02/yDmMtuIYvBfCZcE.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://pharke.github.io/2019/11/02/一题简单的rsa/">
+
+
+
+
+
+  <title>一题简单的rsa | Pharke's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Pharke's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">win or lose none knows</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://pharke.github.io/2019/11/02/一题简单的rsa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pharke">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pharke's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一题简单的rsa</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-02T12:52:08+08:00">
+                2019-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一题简单的rsa"><a href="#一题简单的rsa" class="headerlink" title="一题简单的rsa"></a>一题简单的rsa</h1><p>题目有一个py代码一个输出文件：</p>
+<pre><code>import gmpy2
+from fractions import Fraction
+from secret import flag,e
+from libnum import *
+from os import urandom
+k = 1024
+p = gmpy2.next_prime(int(urandom(k / 8).encode(&apos;hex&apos;),16))
+q = gmpy2.next_prime(int(urandom(k / 8).encode(&apos;hex&apos;),16))
+n = p*q
+assert(e&lt;1000)
+print n
+print Fraction(int(p+1),int(p)) +Fraction(int(q+1),int(q))
+print pow(123,e,n)
+
+msg = s2n(flag)
+
+assert(msg&lt;n)
+print pow(msg,e,n)
+9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632930861883762707606629208260803446083579674497451514650309351925430391515629898218875049677870989016071086844819626778388370764400242376469343158294638240660190754978627356076115228410162956087266527271225439142347304100660800517276772407728290414074912243665126741030948775883739544952378188264714716087909797
+19077591327702542595205476059342179757436024485870426193132500260650093873441080495068286996050955088322694660759358223531742841464511482420869472847903924378454605317994995329041858750431431920127231584961931614254877896088596696600306205520980821157276519331313217569270177471618941832273257558800291967266057799408185825199394392306374394195697993019961311696247374832761757990150416392201444079060627610573918631913438062954960835929982836033906925917632413007648356037059843552967726871763559759125837289869091638924336309932526582201350695938677991368335828814565265478203873169858685929462350511138398905572292/9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632930861883762707606629208260803446083579674497451514650309351925430391515629898218875049677870989016071086844819626778388370764400242376469343158294638240660190754978627356076115228410162956087266527271225439142347304100660800517276772407728290414074912243665126741030948775883739544952378188264714716087909797
+368284101618076523549199130884422355928051525996327977632544904437878504262870825378516827225793010165434494157238379685995430409966951122729243411694569562164062815098110639750101378457641471316188502263725098231679401928494160942213175404259256770984218593245458108598930926260386443799301699336309331946341173652201791293571029025818674575198311845811957606474490230382511996537893448524426809391980637983473305318819523408854264623254226127223862150173575206444726570183096891630129244778802793476295746913846105454198627
+7303495910407762399046490836902121070389476875516762048462433039234972742941586801378979220008051262826174054961747648114128456872349675769941760630519744351742977740846748646739901172672743584989842268056810152117350241337045055812845489372389014195433916347255846499434232234822333192328886207187844781726928951986353054876826105507064928478812402103648940709131760865763234071703554208057808885564381400571862422316195578258814602362582573148358552148686182480215663291366798585241933446701357953551496955627421526567152576426417189707335038601040167826900549139608192971559659991213411381604721734898065256138516
+</code></pre><p>总之就是产生两个大质数，然后给出了<strong>p*q</strong>、<strong>(p+1)/p+(q+1)/q</strong>、<strong>123的加密结果</strong>和<strong>flag的加密结果</strong><br>e简单爆破下就出来了<br>简单分析下知道如何求出<strong>φ</strong>了<br><img src="https://i.loli.net/2019/11/02/yDmMtuIYvBfCZcE.png" alt="img_0767.png"></p>
+<p>然后上代码依次求出<strong>e</strong>、<strong>φ</strong>、<strong>d</strong>、<strong>flag</strong>：<br>gete：</p>
+<pre><code>for i in range(1000):
+if 123**i==368284101618076523549199130884422355928051525996327977632544904437878504262870825378516827225793010165434494157238379685995430409966951122729243411694569562164062815098110639750101378457641471316188502263725098231679401928494160942213175404259256770984218593245458108598930926260386443799301699336309331946341173652201791293571029025818674575198311845811957606474490230382511996537893448524426809391980637983473305318819523408854264623254226127223862150173575206444726570183096891630129244778802793476295746913846105454198627:
+    print(i)
+</code></pre><p>getφ：</p>
+<pre><code>z=19077591327702542595205476059342179757436024485870426193132500260650093873441080495068286996050955088322694660759358223531742841464511482420869472847903924378454605317994995329041858750431431920127231584961931614254877896088596696600306205520980821157276519331313217569270177471618941832273257558800291967266057799408185825199394392306374394195697993019961311696247374832761757990150416392201444079060627610573918631913438062954960835929982836033906925917632413007648356037059843552967726871763559759125837289869091638924336309932526582201350695938677991368335828814565265478203873169858685929462350511138398905572292
+m=9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632930861883762707606629208260803446083579674497451514650309351925430391515629898218875049677870989016071086844819626778388370764400242376469343158294638240660190754978627356076115228410162956087266527271225439142347304100660800517276772407728290414074912243665126741030948775883739544952378188264714716087909797
+n=9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632930861883762707606629208260803446083579674497451514650309351925430391515629898218875049677870989016071086844819626778388370764400242376469343158294638240660190754978627356076115228410162956087266527271225439142347304100660800517276772407728290414074912243665126741030948775883739544952378188264714716087909797
+e=251
+paq=(z-2*m)
+pi=n-paq+1
+print(pi)
+</code></pre><p>getd：</p>
+<pre><code>import math
+
+def exgcd(a, b):
+    if a &lt; b:
+        return exgcd(b, a)
+
+    if b == 0:
+        return a , 1, 0
+    gcd , x, y = exgcd(b, a % b)
+    return gcd, y, x - a // b * y
+
+def getd():
+    k =9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632734786243102297620493232476035944055041030472393232254680680943529416556739278264423704954552339437639341902545442272210151457270744293374122548966282308972923908898822224675377958358725308502673744523807225788117575992049874969628966527246193250856400902180814957614642454481359948927672214283005749358157100
+    e = 251
+    gcd, y, x = exgcd(k, e)
+    while x &lt; 0:
+        x += k
+    return x
+
+if __name__ == &apos;__main__&apos;:
+    print (getd())
+</code></pre><p>getflag：</p>
+<pre><code>n=9538795663851271297602738029671089878718012242935213096566250130325046936720540247534143498025477544161347330379679111765871420732255741210434736423951962189227302658997497664520929375215715960063615792480965807127438948044298348300153102760490410578638259665656608784635088735809470916136628779400145983632930861883762707606629208260803446083579674497451514650309351925430391515629898218875049677870989016071086844819626778388370764400242376469343158294638240660190754978627356076115228410162956087266527271225439142347304100660800517276772407728290414074912243665126741030948775883739544952378188264714716087909797
+d=1292107779167104478559733438282139664846264606612738029016942248729289226488041308430919836385921260962094857501629839840795331892018705980696338798463612408102503149027549484437098003017268297379135206949612898176625196149426867897231894397835354421010760273435556568436625565806860602185838161353007822484115469052850510434648485674044709553272490183511433851231646024223108218841177135419944097429400561273855078432450347630060356761774127389323373166747404402706824312987871071565141769707810713509590891671098313928277226014724099471652836360042113661823229777480910593218499810224056826855997153873288757678651
+c=7303495910407762399046490836902121070389476875516762048462433039234972742941586801378979220008051262826174054961747648114128456872349675769941760630519744351742977740846748646739901172672743584989842268056810152117350241337045055812845489372389014195433916347255846499434232234822333192328886207187844781726928951986353054876826105507064928478812402103648940709131760865763234071703554208057808885564381400571862422316195578258814602362582573148358552148686182480215663291366798585241933446701357953551496955627421526567152576426417189707335038601040167826900549139608192971559659991213411381604721734898065256138516
+m=pow(c,d,n)
+ox=str(hex(m))
+ox=ox[2:]
+al = []
+for i in range(0, len(ox), 2):
+    b = ox[i:i+2]
+    al.append(chr(int(b, 16)))
+print(&apos;&apos;.join(al))
+</code></pre><p><img src="https://i.loli.net/2019/11/02/74B2hwJAKkpNlE6.png" alt="QQ截图20191102114900.png"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/11/makerctf-temp-wp/" rel="next" title="makerctf_temp_wp">
+                <i class="fa fa-chevron-left"></i> makerctf_temp_wp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">pharke</p>
+              <p class="site-description motion-element" itemprop="description">build by hexo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一题简单的rsa"><span class="nav-number">1.</span> <span class="nav-text">一题简单的rsa</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pharke</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
